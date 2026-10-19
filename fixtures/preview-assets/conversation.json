@@ -1,0 +1,42 @@
+{
+  "id": "preview-assets-sample",
+  "title": "Sample preview assets",
+  "messages": [
+    {
+      "id": "ask-mockups",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "Attach the four sample mockups so we can check the import preview."
+        }
+      ]
+    },
+    {
+      "id": "show-mockups",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Here are the library, timeline, review, and trip-card mockups."
+        },
+        {
+          "type": "image",
+          "source": { "url": "library-desktop.jpg" }
+        },
+        {
+          "type": "image",
+          "source": { "url": "mobile-timeline.jpg" }
+        },
+        {
+          "type": "image",
+          "source": { "url": "review-board.jpg" }
+        },
+        {
+          "type": "image",
+          "source": { "url": "trip-card.jpg" }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+name: Deploy Azure App Service
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: azure-production
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Block deployment of private files or credentials
+        run: python3 tools/check-repository-privacy.py --history HEAD
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: src/Journey.Client/package-lock.json
+      - name: Test backend and migration models
+        run: dotnet test tests/Journey.Tests.csproj -c Release
+      - name: Publish API and frontend
+        run: dotnet publish src/Journey.Server/Journey.Server.csproj -c Release -o artifacts/publish
+      - name: Generate idempotent PostgreSQL migration script
+        # Lets operators review or apply schema changes out of band (Database:MigrateOnStartup=false).
+        # The connection string is a placeholder; script generation never connects.
+        env:
+          ASPNETCORE_ENVIRONMENT: Development
+        run: |
+          dotnet tool restore
+          dotnet ef migrations script --idempotent --configuration Release \
+            --project src/Journey.Data.PostgreSql --startup-project src/Journey.Server \
+            --output artifacts/migrations/postgresql.sql \
+            -- --Database:Provider PostgreSQL --ConnectionStrings:Journey "Host=localhost;Database=journey;Username=postgres"
+      - uses: actions/upload-artifact@v6
+        with:
+          name: application
+          path: artifacts/publish
+          retention-days: 14
+      - uses: actions/upload-artifact@v6
+        with:
+          name: postgresql-migrations
+          path: artifacts/migrations/postgresql.sql
+          retention-days: 90
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment: production
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      APP_NAME: ${{ vars.AZURE_WEBAPP_NAME }}
+      PUBLIC_URL: ${{ vars.PUBLIC_URL || 'https://openhow.me' }}
+      KEY_VAULT_URI: ${{ vars.KEY_VAULT_URI }}
+      STORAGE_CONTAINER_URI: ${{ vars.STORAGE_CONTAINER_URI }}
+      DATA_PROTECTION_BLOB_URI: ${{ vars.DATA_PROTECTION_BLOB_URI }}
+      DATA_PROTECTION_KEY_URI: ${{ vars.DATA_PROTECTION_KEY_URI }}
+      EMAIL_HOST: ${{ vars.EMAIL_HOST }}
+      EMAIL_FROM: ${{ vars.EMAIL_FROM }}
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          name: application
+          path: publish
+      - name: Write nonsecret production settings
+        shell: bash
+        run: |
+          set -euo pipefail
+          for key in APP_NAME PUBLIC_URL KEY_VAULT_URI STORAGE_CONTAINER_URI DATA_PROTECTION_BLOB_URI DATA_PROTECTION_KEY_URI EMAIL_HOST EMAIL_FROM; do
+            test -n "${!key}" || { echo "Missing production variable: $key"; exit 1; }
+          done
+          python3 - <<'PY'
+          import json, os
+          from urllib.parse import urlparse
+          path = 'publish/appsettings.Production.json'
+          with open(path) as f:
+              settings = json.load(f)
+          origin = urlparse(os.environ['PUBLIC_URL'])
+          if origin.scheme != 'https' or not origin.hostname or origin.path not in ('', '/') or origin.query or origin.fragment:
+              raise ValueError('PUBLIC_URL must be an HTTPS origin')
+          hosts = list(dict.fromkeys([
+              origin.hostname,
+              os.environ['APP_NAME'] + '.azurewebsites.net',
+              'openhow.me',
+              'www.openhow.me',
+          ]))
+          settings['AllowedHosts'] = ';'.join(hosts)
+          for section, key, variable in [
+              ('Site', 'PublicUrl', 'PUBLIC_URL'),
+              ('KeyVault', 'Uri', 'KEY_VAULT_URI'),
+              ('Storage', 'ContainerUri', 'STORAGE_CONTAINER_URI'),
+              ('DataProtection', 'BlobUri', 'DATA_PROTECTION_BLOB_URI'),
+              ('DataProtection', 'KeyIdentifier', 'DATA_PROTECTION_KEY_URI'),
+              ('Email', 'Host', 'EMAIL_HOST'), ('Email', 'From', 'EMAIL_FROM')]:
+              settings[section][key] = os.environ[variable]
+          with open(path, 'w') as f:
+              json.dump(settings, f, indent=2)
+          PY
+      - name: Authenticate with GitHub OIDC
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - name: Deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.APP_NAME }}
+          package: publish
+      - name: Check deployed health
+        shell: bash
+        run: curl --fail --silent --show-error --retry 12 --retry-delay 10 --retry-all-errors --max-time 30 "${PUBLIC_URL%/}/api/health"

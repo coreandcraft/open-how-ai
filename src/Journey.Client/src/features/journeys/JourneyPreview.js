@@ -1,0 +1,37 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { t } from "../../shared/i18n/i18n";
+import { preview } from "../../shared/state";
+/** A read-only preview of the saved journey, with its real nodes and connections. */
+export function JourneyPreview({ journey }) {
+    const saved = preview(journey);
+    const nodes = (saved.nodes || []).filter((n) => n.data?.kind !== "group");
+    if (!nodes.length)
+        return (_jsx("div", { className: "preview-empty", children: t("A new story waiting to be connected.") }));
+    const positions = nodes.map((node, index) => ({
+        ...node,
+        x: Number.isFinite(node.position?.x) ? node.position.x : index * 300,
+        y: Number.isFinite(node.position?.y) ? node.position.y : 0,
+    }));
+    const minX = Math.min(...positions.map((n) => n.x));
+    const minY = Math.min(...positions.map((n) => n.y));
+    const width = Math.max(...positions.map((n) => n.x)) - minX + 300;
+    const height = Math.max(...positions.map((n) => n.y)) - minY + 120;
+    const byId = new Map(positions.map((n) => [n.id, n]));
+    return (_jsxs("svg", { className: "journey-preview", viewBox: `${minX - 25} ${minY - 25} ${width + 50} ${height + 50}`, "aria-hidden": "true", children: [(saved.edges || []).map((edge, i) => {
+                const from = byId.get(edge.source), to = byId.get(edge.target);
+                if (!from || !to)
+                    return null;
+                const x = from.x + 260, y = from.y + 45, endX = to.x, endY = to.y + 45;
+                const bend = Math.max(45, Math.abs(endX - x) / 2);
+                return (_jsx("path", { d: `M${x},${y} C${x + bend},${y} ${endX - bend},${endY} ${endX},${endY}` }, edge.id || i));
+            }), positions.map((node) => (_jsxs("g", { children: [_jsx("rect", { x: node.x, y: node.y, width: "260", height: "90", rx: "12" }), _jsx("circle", { cx: node.x + 20, cy: node.y + 26, r: "5" }), _jsx("text", { className: "preview-kind", x: node.x + 35, y: node.y + 31, children: node.data?.provider || t(node.data?.kind || "note") }), _jsxs("text", { x: node.x + 16, y: node.y + 62, children: [(node.data?.title || t("Untitled")).slice(0, 27), (node.data?.title?.length || 0) > 27 ? "…" : ""] })] }, node.id)))] }));
+}
+export function BlueprintIllustration() {
+    const nodes = [
+        [24, 110, "Research"],
+        [210, 35, "Explore"],
+        [210, 185, "Decision"],
+        [396, 110, "Build"],
+    ];
+    return (_jsxs("svg", { className: "blueprint-illustration", viewBox: "0 0 540 280", "aria-hidden": "true", children: [_jsx("path", { d: "M144 136 C178 136 175 61 210 61 M144 136 C178 136 175 211 210 211 M330 61 C365 61 360 136 396 136 M330 211 C365 211 360 136 396 136" }), nodes.map(([x, y, label]) => (_jsxs("g", { children: [_jsx("rect", { x: x, y: y, width: "120", height: "52", rx: "8" }), _jsx("circle", { cx: x + 18, cy: y + 26, r: "4" }), _jsx("text", { x: x + 31, y: y + 31, children: t(label) })] }, label)))] }));
+}

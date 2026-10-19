@@ -1,0 +1,1 @@
+[{"provider":"Claude Code","externalId":"session-a","parentSession":null,"roles":["user","assistant","user"],"parents":[null,"u1","a1"],"kinds":["text","tool_use","tool_result"]},{"provider":"Claude Code","externalId":"session-a:agent:agent-b","parentSession":"session-a","roles":["assistant"],"parents":[null],"kinds":["text"]}]

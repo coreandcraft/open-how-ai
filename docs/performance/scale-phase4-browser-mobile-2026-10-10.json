@@ -1,0 +1,59 @@
+{
+  "generatedAtUtc": "2026-10-10T06:06:20Z",
+  "viewport": "390x844",
+  "deviceScaleFactor": 2,
+  "method": "Emulation.setDeviceMetricsOverride on the same logged-in SPA, then hash navigation. Times are warm (routes already visited on desktop in this session). A subsequent browser_navigate to #explorer/demo-c0 showed the conversation heading and 10 messages. Canvas at #canvas/cloud-gaming rendered 12 React Flow nodes. Accessibility tree had correct spaced copy; a screenshot of the emulated mobile explorer showed concatenated glyphs that look like a capture/font-rasterization artifact, not missing text in the DOM.",
+  "excludes": [
+    "cold cache",
+    "real device",
+    "WAN/TLS",
+    "Playwright chromium"
+  ],
+  "probes": [
+    {
+      "route": "dashboard",
+      "usableMs": 36,
+      "elapsedMs": 36,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "heapMiB": 17.9,
+      "heading": "Good to see you"
+    },
+    {
+      "route": "library",
+      "usableMs": 25,
+      "elapsedMs": 26,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "heapMiB": 17.9,
+      "heading": "Conversation library"
+    },
+    {
+      "route": "explorer/demo-c0",
+      "usableMs": 34,
+      "elapsedMs": 35,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "heapMiB": 19.9,
+      "heading": "The browser is the console"
+    },
+    {
+      "route": "canvas/cloud-gaming",
+      "usableMs": 24,
+      "elapsedMs": 24,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "heapMiB": 19.9,
+      "heading": "canvas",
+      "reactFlowNodes": 12
+    }
+  ],
+  "reload": {
+    "route": "explorer/demo-c0",
+    "navMs": 41,
+    "domContentLoadedMs": 40,
+    "loadEventMs": 41,
+    "heapMiB": 9.6,
+    "note": "NavigationTiming after browser_navigate; cached document, not a first-visit cold load."
+  }
+}

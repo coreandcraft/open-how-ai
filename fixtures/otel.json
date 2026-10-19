@@ -1,0 +1,1 @@
+{"resourceSpans":[{"scopeSpans":[{"spans":[{"traceId":"trace-a","spanId":"span-a","name":"agent"},{"traceId":"trace-a","spanId":"span-b","parentSpanId":"span-a","name":"tool","attributes":[{"key":"gen_ai.tool.name","value":{"stringValue":"read_file"}}]}]}]}]}

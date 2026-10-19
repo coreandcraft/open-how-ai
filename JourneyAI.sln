@@ -1,0 +1,170 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Journey.Server", "src\Journey.Server\Journey.Server.csproj", "{CF2250A2-1268-4A40-9B26-DBF990C53259}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Journey.Service", "src\Journey.Service\Journey.Service.csproj", "{94621E3A-37E3-4BE4-88D4-4F2735779D45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Journey.Data", "src\Journey.Data\Journey.Data.csproj", "{BE229719-3788-4031-92E2-EBBABD51B5BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Journey.Domain", "src\Journey.Domain\Journey.Domain.csproj", "{C606B8CA-3B73-41CF-8047-5592381CA846}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Journey.Tests", "tests\Journey.Tests.csproj", "{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Journey.Client", "Journey.Client", "{CEF62DCC-A821-43E7-BD65-8225FCBCCBB2}"
+	ProjectSection(SolutionItems) = preProject
+		src\Journey.Client\e2e\artifacts.spec.ts = src\Journey.Client\e2e\artifacts.spec.ts
+		src\Journey.Client\e2e\journey.spec.ts = src\Journey.Client\e2e\journey.spec.ts
+		src\Journey.Client\e2e\localization.spec.ts = src\Journey.Client\e2e\localization.spec.ts
+		src\Journey.Client\e2e\mobile-menu.spec.ts = src\Journey.Client\e2e\mobile-menu.spec.ts
+		src\Journey.Client\e2e\share-history.spec.ts = src\Journey.Client\e2e\share-history.spec.ts
+		src\Journey.Client\e2e\standalone.spec.ts = src\Journey.Client\e2e\standalone.spec.ts
+		src\Journey.Client\e2e\workspaces.spec.ts = src\Journey.Client\e2e\workspaces.spec.ts
+		src\Journey.Client\i18n.test.cjs = src\Journey.Client\i18n.test.cjs
+		src\Journey.Client\index.html = src\Journey.Client\index.html
+		src\Journey.Client\package-lock.json = src\Journey.Client\package-lock.json
+		src\Journey.Client\package.json = src\Journey.Client\package.json
+		src\Journey.Client\playwright.config.ts = src\Journey.Client\playwright.config.ts
+		src\Journey.Client\src\app\blueprint.css = src\Journey.Client\src\app\blueprint.css
+		src\Journey.Client\src\app\main.tsx = src\Journey.Client\src\app\main.tsx
+		src\Journey.Client\src\app\styles.css = src\Journey.Client\src\app\styles.css
+		src\Journey.Client\src\features\comparisons\Comparison.tsx = src\Journey.Client\src\features\comparisons\Comparison.tsx
+		src\Journey.Client\src\features\conversations\Explorer.tsx = src\Journey.Client\src\features\conversations\Explorer.tsx
+		src\Journey.Client\src\features\imports\Import.tsx = src\Journey.Client\src\features\imports\Import.tsx
+		src\Journey.Client\src\features\journeys\Canvas.tsx = src\Journey.Client\src\features\journeys\Canvas.tsx
+		src\Journey.Client\src\features\journeys\JourneyPreview.tsx = src\Journey.Client\src\features\journeys\JourneyPreview.tsx
+		src\Journey.Client\src\features\publications\Publish.tsx = src\Journey.Client\src\features\publications\Publish.tsx
+		src\Journey.Client\src\features\review\AnnotationArtifacts.tsx = src\Journey.Client\src\features\review\AnnotationArtifacts.tsx
+		src\Journey.Client\src\features\workspaces\Workspaces.tsx = src\Journey.Client\src\features\workspaces\Workspaces.tsx
+		src\Journey.Client\src\shared\i18n\LanguagePicker.tsx = src\Journey.Client\src\shared\i18n\LanguagePicker.tsx
+		src\Journey.Client\src\shared\i18n\i18n.ts = src\Journey.Client\src\shared\i18n\i18n.ts
+		src\Journey.Client\src\shared\i18n\locales\en.json = src\Journey.Client\src\shared\i18n\locales\en.json
+		src\Journey.Client\src\shared\i18n\locales\es.json = src\Journey.Client\src\shared\i18n\locales\es.json
+		src\Journey.Client\src\shared\i18n\locales\ja.json = src\Journey.Client\src\shared\i18n\locales\ja.json
+		src\Journey.Client\src\shared\i18n\locales\ru.json = src\Journey.Client\src\shared\i18n\locales\ru.json
+		src\Journey.Client\src\shared\i18n\locales\zh-CN.json = src\Journey.Client\src\shared\i18n\locales\zh-CN.json
+		src\Journey.Client\src\shared\state.ts = src\Journey.Client\src\shared\state.ts
+		src\Journey.Client\src\shared\ui\ui.tsx = src\Journey.Client\src\shared\ui\ui.tsx
+		src\Journey.Client\tsconfig.json = src\Journey.Client\tsconfig.json
+		src\Journey.Client\vite.config.ts = src\Journey.Client\vite.config.ts
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Journey.AppHost", "src\Journey.AppHost\Journey.AppHost.csproj", "{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Journey.Data.PostgreSql", "src\Journey.Data.PostgreSql\Journey.Data.PostgreSql.csproj", "{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Debug|x64.Build.0 = Debug|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Debug|x86.Build.0 = Debug|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Release|x64.ActiveCfg = Release|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Release|x64.Build.0 = Release|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Release|x86.ActiveCfg = Release|Any CPU
+		{CF2250A2-1268-4A40-9B26-DBF990C53259}.Release|x86.Build.0 = Release|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Debug|x64.Build.0 = Debug|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Debug|x86.Build.0 = Debug|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Release|x64.ActiveCfg = Release|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Release|x64.Build.0 = Release|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Release|x86.ActiveCfg = Release|Any CPU
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45}.Release|x86.Build.0 = Release|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Debug|x64.Build.0 = Debug|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Debug|x86.Build.0 = Debug|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Release|x64.ActiveCfg = Release|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Release|x64.Build.0 = Release|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Release|x86.ActiveCfg = Release|Any CPU
+		{BE229719-3788-4031-92E2-EBBABD51B5BC}.Release|x86.Build.0 = Release|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Debug|x64.Build.0 = Debug|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Debug|x86.Build.0 = Debug|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Release|x64.ActiveCfg = Release|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Release|x64.Build.0 = Release|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Release|x86.ActiveCfg = Release|Any CPU
+		{C606B8CA-3B73-41CF-8047-5592381CA846}.Release|x86.Build.0 = Release|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Debug|x64.Build.0 = Debug|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Debug|x86.Build.0 = Debug|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Release|x64.ActiveCfg = Release|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Release|x64.Build.0 = Release|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Release|x86.ActiveCfg = Release|Any CPU
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE}.Release|x86.Build.0 = Release|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Debug|x64.Build.0 = Debug|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Debug|x86.Build.0 = Debug|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Release|x64.ActiveCfg = Release|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Release|x64.Build.0 = Release|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Release|x86.ActiveCfg = Release|Any CPU
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4}.Release|x86.Build.0 = Release|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Debug|x64.Build.0 = Debug|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Debug|x86.Build.0 = Debug|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Release|x64.ActiveCfg = Release|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Release|x64.Build.0 = Release|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Release|x86.ActiveCfg = Release|Any CPU
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CF2250A2-1268-4A40-9B26-DBF990C53259} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{94621E3A-37E3-4BE4-88D4-4F2735779D45} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{BE229719-3788-4031-92E2-EBBABD51B5BC} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{C606B8CA-3B73-41CF-8047-5592381CA846} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{10E9B7A5-6990-445F-BB09-BABE47C8E7AE} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{CEF62DCC-A821-43E7-BD65-8225FCBCCBB2} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{17EACCBB-3D6C-418B-92C7-9D6C46F960F4} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{44850E8D-EB57-4D4D-AB9F-C1033CDB41C1} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+	EndGlobalSection
+EndGlobal

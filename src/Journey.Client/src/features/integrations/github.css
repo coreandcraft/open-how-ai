@@ -1,0 +1,228 @@
+.github-integration {
+  margin-bottom: 34px;
+}
+.github-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.github-section-heading h2 {
+  font-size: 23px;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+.github-section-heading p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 8px 0 0;
+}
+.github-badge {
+  color: var(--accent);
+  background: var(--blue-soft);
+  padding: 4px 9px;
+  border-radius: 5px;
+  font-size: 11px;
+}
+.github-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.github-card {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 23px;
+  min-width: 0;
+}
+.github-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 22px;
+}
+.github-card h3 {
+  font-size: 16px;
+  margin: 0;
+}
+.github-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+  background: var(--blue-soft);
+}
+.github-connected {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--accent);
+}
+.github-card fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.github-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-top: 18px;
+  font-size: 12px;
+}
+.github-card input,
+.github-card select {
+  width: 100%;
+  min-width: 0;
+}
+.github-card details {
+  margin-top: 15px;
+  font-size: 12px;
+}
+.github-create {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.github-help {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.github-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 23px;
+  padding-top: 17px;
+  border-top: 1px solid var(--line);
+}
+.github-actions button,
+.github-explanation a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.github-notice {
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--blue-soft);
+  font-size: 13px;
+}
+.github-success {
+  color: var(--accent);
+  font-size: 12px;
+  line-height: 1.6;
+}
+.github-explanation p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.github-explanation a {
+  color: var(--accent);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.github-example {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 16px 12px;
+  margin: 20px 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--accent);
+  font-size: 12px;
+}
+.github-example code {
+  overflow-wrap: anywhere;
+}
+.github-trust {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding-top: 17px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+}
+@media (max-width: 800px) {
+  .github-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .github-card {
+    padding: 18px;
+  }
+}
+
+.github-setup {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+.github-setup summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+.github-setup li {
+  margin: 10px 0;
+  line-height: 1.7;
+}
+.github-setup p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+.github-setup pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--blue-soft);
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.github-setup a,
+.github-app-controls a {
+  color: var(--accent);
+}
+.github-app-controls {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  border: 1px solid var(--line);
+  background: var(--blue-soft);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
+  font-size: 13px;
+}
+.github-app-controls p {
+  width: 100%;
+  margin: 0;
+  line-height: 1.6;
+}
+.github-app-controls a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.github-setup ol {
+  list-style: decimal;
+  padding-left: 22px;
+}

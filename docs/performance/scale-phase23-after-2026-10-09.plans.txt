@@ -1,0 +1,501 @@
+=== library @ 100 conversations (slowest command 1.4 ms) ===
+SELECT c."Id", c."Title", c."Provider", c."Model", c."SourceFormat", c."SourceId", c."ApplicationProjectId", c."ExternalProjectId", c."SourceProjectName", c."SourcePath", c."Demo", c."CreatedAt", (
+    SELECT count(*)::int
+    FROM "Messages" AS m
+    WHERE c."Id" = m."ConversationId")
+FROM "Conversations" AS c
+WHERE c."WorkspaceId" = @wid
+ORDER BY c."CreatedAt" DESC, c."Id" DESC
+LIMIT @p
+
+Limit  (cost=0.14..2028.00 rows=51 width=201) (actual time=0.175..0.559 rows=51 loops=1)
+  Buffers: shared hit=181
+  ->  Index Scan Backward using "IX_Conversations_WorkspaceId_CreatedAt_Id" on "Conversations" c  (cost=0.14..4413.71 rows=111 width=201) (actual time=0.174..0.555 rows=51 loops=1)
+        Index Cond: ("WorkspaceId" = 'cloudplay'::text)
+        Buffers: shared hit=181
+        SubPlan 1
+          ->  Aggregate  (cost=39.56..39.57 rows=1 width=4) (actual time=0.009..0.009 rows=1 loops=51)
+                Buffers: shared hit=178
+                ->  Bitmap Heap Scan on "Messages" m  (cost=4.50..39.49 rows=28 width=0) (actual time=0.005..0.007 rows=39 loops=51)
+                      Recheck Cond: (c."Id" = "ConversationId")
+                      Heap Blocks: exact=73
+                      Buffers: shared hit=178
+                      ->  Bitmap Index Scan on "IX_Messages_ConversationId_Order"  (cost=0.00..4.49 rows=28 width=0) (actual time=0.004..0.004 rows=39 loops=51)
+                            Index Cond: ("ConversationId" = c."Id")
+                            Buffers: shared hit=105
+Planning Time: 0.110 ms
+Execution Time: 0.581 ms
+
+=== search-hit @ 100 conversations (slowest command 3.5 ms) ===
+SELECT c."Id", c."Title", c."Provider", c."Model", c."SourceFormat", c."SourceId", c."ApplicationProjectId", c."ExternalProjectId", c."SourceProjectName", c."SourcePath", c."Demo", c."CreatedAt", (
+    SELECT count(*)::int
+    FROM "Messages" AS m1
+    WHERE c."Id" = m1."ConversationId")
+FROM "Conversations" AS c
+WHERE c."WorkspaceId" = @wid AND (c."Title" LIKE @_8__locals1_q_contains OR c."Provider" LIKE @_8__locals1_q_contains OR (c."Model" IS NOT NULL AND c."Model" LIKE @_8__locals1_q_contains) OR c."Id" IN (
+    SELECT m0."ConversationId"
+    FROM "MessageContentBlock" AS m
+    INNER JOIN "Messages" AS m0 ON m."ConversationMessageId" = m0."Id"
+    WHERE m."Text" LIKE @_8__locals1_q_contains
+) OR c."Id" IN (
+    SELECT a0."ConversationId"
+    FROM "Comments" AS c0
+    INNER JOIN (
+        SELECT a."Id", a."ConversationId"
+        FROM "Annotations" AS a
+        WHERE a."WorkspaceId" = @_8__locals1_wid AND a."ConversationId" IS NOT NULL
+    ) AS a0 ON c0."AnnotationId" = a0."Id"
+    WHERE c0."Body" LIKE @_8__locals1_q_contains
+))
+ORDER BY c."CreatedAt" DESC, c."Id" DESC
+LIMIT @p
+
+Limit  (cost=593.39..2625.33 rows=51 width=201) (actual time=2.311..2.664 rows=51 loops=1)
+  Buffers: shared hit=648
+  ->  Index Scan Backward using "IX_Conversations_WorkspaceId_CreatedAt_Id" on "Conversations" c  (cost=593.39..3900.28 rows=83 width=201) (actual time=2.309..2.657 rows=51 loops=1)
+        Index Cond: ("WorkspaceId" = 'cloudplay'::text)
+        Filter: (("Title" ~~ '%benchmark%'::text) OR ("Provider" ~~ '%benchmark%'::text) OR (("Model" IS NOT NULL) AND ("Model" ~~ '%benchmark%'::text)) OR (ANY ("Id" = (hashed SubPlan 2).col1)) OR (ANY ("Id" = (hashed SubPlan 3).col1)))
+        Buffers: shared hit=648
+        SubPlan 1
+          ->  Aggregate  (cost=39.56..39.57 rows=1 width=4) (actual time=0.009..0.009 rows=1 loops=51)
+                Buffers: shared hit=178
+                ->  Bitmap Heap Scan on "Messages" m1  (cost=4.50..39.49 rows=28 width=0) (actual time=0.005..0.007 rows=39 loops=51)
+                      Recheck Cond: (c."Id" = "ConversationId")
+                      Heap Blocks: exact=73
+                      Buffers: shared hit=178
+                      ->  Bitmap Index Scan on "IX_Messages_ConversationId_Order"  (cost=0.00..4.49 rows=28 width=0) (actual time=0.004..0.004 rows=39 loops=51)
+                            Index Cond: ("ConversationId" = c."Id")
+                            Buffers: shared hit=105
+        SubPlan 2
+          ->  Hash Join  (cost=104.75..583.40 rows=3004 width=10) (actual time=0.827..1.835 rows=3010 loops=1)
+                Hash Cond: (m."ConversationMessageId" = m0."Id")
+                Buffers: shared hit=467
+                ->  Seq Scan on "MessageContentBlock" m  (cost=0.00..470.75 rows=3004 width=14) (actual time=0.010..0.603 rows=3010 loops=1)
+                      Filter: ("Text" ~~ '%benchmark%'::text)
+                      Rows Removed by Filter: 90
+                      Buffers: shared hit=432
+                ->  Hash  (cost=66.00..66.00 rows=3100 width=24) (actual time=0.813..0.813 rows=3100 loops=1)
+                      Buckets: 4096  Batches: 1  Memory Usage: 203kB
+                      Buffers: shared hit=35
+                      ->  Seq Scan on "Messages" m0  (cost=0.00..66.00 rows=3100 width=24) (actual time=0.003..0.232 rows=3100 loops=1)
+                            Buffers: shared hit=35
+        SubPlan 3
+          ->  Nested Loop  (cost=0.00..2.34 rows=1 width=8) (never executed)
+                Join Filter: (c0."AnnotationId" = a."Id")
+                ->  Seq Scan on "Comments" c0  (cost=0.00..1.14 rows=1 width=8) (never executed)
+                      Filter: ("Body" ~~ '%benchmark%'::text)
+                ->  Seq Scan on "Annotations" a  (cost=0.00..1.10 rows=8 width=16) (never executed)
+                      Filter: (("ConversationId" IS NOT NULL) AND ("WorkspaceId" = 'cloudplay'::text))
+Planning:
+  Buffers: shared hit=22
+Planning Time: 0.394 ms
+Execution Time: 2.703 ms
+
+=== search-miss @ 100 conversations (slowest command 4.4 ms) ===
+SELECT c."Id", c."Title", c."Provider", c."Model", c."SourceFormat", c."SourceId", c."ApplicationProjectId", c."ExternalProjectId", c."SourceProjectName", c."SourcePath", c."Demo", c."CreatedAt", (
+    SELECT count(*)::int
+    FROM "Messages" AS m1
+    WHERE c."Id" = m1."ConversationId")
+FROM "Conversations" AS c
+WHERE c."WorkspaceId" = @wid AND (c."Title" LIKE @_8__locals1_q_contains OR c."Provider" LIKE @_8__locals1_q_contains OR (c."Model" IS NOT NULL AND c."Model" LIKE @_8__locals1_q_contains) OR c."Id" IN (
+    SELECT m0."ConversationId"
+    FROM "MessageContentBlock" AS m
+    INNER JOIN "Messages" AS m0 ON m."ConversationMessageId" = m0."Id"
+    WHERE m."Text" LIKE @_8__locals1_q_contains
+) OR c."Id" IN (
+    SELECT a0."ConversationId"
+    FROM "Comments" AS c0
+    INNER JOIN (
+        SELECT a."Id", a."ConversationId"
+        FROM "Annotations" AS a
+        WHERE a."WorkspaceId" = @_8__locals1_wid AND a."ConversationId" IS NOT NULL
+    ) AS a0 ON c0."AnnotationId" = a0."Id"
+    WHERE c0."Body" LIKE @_8__locals1_q_contains
+))
+ORDER BY c."CreatedAt" DESC, c."Id" DESC
+LIMIT @p
+
+Limit  (cost=481.54..2513.48 rows=51 width=201) (actual time=2.338..2.341 rows=0 loops=1)
+  Buffers: shared hit=442
+  ->  Index Scan Backward using "IX_Conversations_WorkspaceId_CreatedAt_Id" on "Conversations" c  (cost=481.54..3788.43 rows=83 width=201) (actual time=2.337..2.339 rows=0 loops=1)
+        Index Cond: ("WorkspaceId" = 'cloudplay'::text)
+        Filter: (("Title" ~~ '%notpresent9981%'::text) OR ("Provider" ~~ '%notpresent9981%'::text) OR (("Model" IS NOT NULL) AND ("Model" ~~ '%notpresent9981%'::text)) OR (ANY ("Id" = (hashed SubPlan 2).col1)) OR (ANY ("Id" = (hashed SubPlan 3).col1)))
+        Rows Removed by Filter: 111
+        Buffers: shared hit=442
+        SubPlan 1
+          ->  Aggregate  (cost=39.56..39.57 rows=1 width=4) (never executed)
+                ->  Bitmap Heap Scan on "Messages" m1  (cost=4.50..39.49 rows=28 width=0) (never executed)
+                      Recheck Cond: (c."Id" = "ConversationId")
+                      ->  Bitmap Index Scan on "IX_Messages_ConversationId_Order"  (cost=0.00..4.49 rows=28 width=0) (never executed)
+                            Index Cond: ("ConversationId" = c."Id")
+        SubPlan 2
+          ->  Nested Loop  (cost=0.28..479.05 rows=1 width=10) (actual time=2.285..2.286 rows=0 loops=1)
+                Buffers: shared hit=432
+                ->  Seq Scan on "MessageContentBlock" m  (cost=0.00..470.75 rows=1 width=14) (actual time=2.285..2.285 rows=0 loops=1)
+                      Filter: ("Text" ~~ '%notpresent9981%'::text)
+                      Rows Removed by Filter: 3100
+                      Buffers: shared hit=432
+                ->  Index Scan using "PK_Messages" on "Messages" m0  (cost=0.28..8.30 rows=1 width=24) (never executed)
+                      Index Cond: ("Id" = m."ConversationMessageId")
+        SubPlan 3
+          ->  Nested Loop  (cost=0.00..2.34 rows=1 width=8) (actual time=0.009..0.009 rows=0 loops=1)
+                Join Filter: (c0."AnnotationId" = a."Id")
+                Buffers: shared hit=1
+                ->  Seq Scan on "Comments" c0  (cost=0.00..1.14 rows=1 width=8) (actual time=0.009..0.009 rows=0 loops=1)
+                      Filter: ("Body" ~~ '%notpresent9981%'::text)
+                      Rows Removed by Filter: 11
+                      Buffers: shared hit=1
+                ->  Seq Scan on "Annotations" a  (cost=0.00..1.10 rows=8 width=16) (never executed)
+                      Filter: (("ConversationId" IS NOT NULL) AND ("WorkspaceId" = 'cloudplay'::text))
+Planning:
+  Buffers: shared hit=22
+Planning Time: 0.396 ms
+Execution Time: 2.371 ms
+
+=== long-conversation @ 100 conversations (slowest command 2.6 ms) ===
+SELECT m2."Id", m2."CreatedAt", m2."ConversationMessageId", m2."Order", m2."Kind", m2."Text", m2."Metadata", m3."Id"
+FROM (
+    SELECT m."Id", m."Order"
+    FROM "Messages" AS m
+    WHERE m."ConversationId" = @id
+    ORDER BY m."Order", m."Id"
+    LIMIT @p
+) AS m3
+INNER JOIN "MessageContentBlock" AS m2 ON m3."Id" = m2."ConversationMessageId"
+ORDER BY m3."Order", m3."Id", m2."Order"
+
+Sort  (cost=515.88..516.39 rows=201 width=1060) (actual time=0.848..0.856 rows=201 loops=1)
+  Sort Key: m."Order", m2."ConversationMessageId", m2."Order"
+  Sort Method: quicksort  Memory: 244kB
+  Buffers: shared hit=456
+  ->  Hash Join  (cost=31.56..508.19 rows=201 width=1060) (actual time=0.530..0.770 rows=201 loops=1)
+        Hash Cond: (m2."ConversationMessageId" = m."Id")
+        Buffers: shared hit=456
+        ->  Seq Scan on "MessageContentBlock" m2  (cost=0.00..463.00 rows=3100 width=1042) (actual time=0.005..0.400 rows=3100 loops=1)
+              Buffers: shared hit=432
+        ->  Hash  (cost=29.05..29.05 rows=201 width=18) (actual time=0.105..0.106 rows=201 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 19kB
+              Buffers: shared hit=24
+              ->  Limit  (cost=0.44..29.05 rows=201 width=18) (actual time=0.032..0.091 rows=201 loops=1)
+                    Buffers: shared hit=24
+                    ->  Incremental Sort  (cost=0.44..142.75 rows=1000 width=18) (actual time=0.032..0.081 rows=201 loops=1)
+                          Sort Key: m."Order", m."Id"
+                          Presorted Key: m."Order"
+                          Full-sort Groups: 7  Sort Method: quicksort  Average Memory: 27kB  Peak Memory: 27kB
+                          Buffers: shared hit=24
+                          ->  Index Scan using "IX_Messages_ConversationId_Order" on "Messages" m  (cost=0.28..108.21 rows=1000 width=18) (actual time=0.012..0.051 rows=202 loops=1)
+                                Index Cond: ("ConversationId" = 'scale-long'::text)
+                                Buffers: shared hit=24
+Planning:
+  Buffers: shared hit=6
+Planning Time: 0.176 ms
+Execution Time: 0.887 ms
+
+=== journey-list @ 100 conversations (slowest command 1.2 ms) ===
+SELECT u."Id", u."AccessFailedCount", u."ConcurrencyStamp", u."CreatedAt", u."Email", u."EmailConfirmed", u."LockoutEnabled", u."LockoutEnd", u."Name", u."NormalizedEmail", u."NormalizedUserName", u."PasswordHash", u."PhoneNumber", u."PhoneNumberConfirmed", u."SecurityStamp", u."TwoFactorEnabled", u."UserName"
+FROM "Users" AS u
+WHERE u."Id" = @p
+LIMIT 1
+
+Limit  (cost=0.00..1.04 rows=1 width=307) (actual time=0.010..0.010 rows=1 loops=1)
+  Buffers: shared hit=1
+  ->  Seq Scan on "Users" u  (cost=0.00..1.04 rows=1 width=307) (actual time=0.009..0.009 rows=1 loops=1)
+        Filter: ("Id" = 'alex'::text)
+        Buffers: shared hit=1
+Planning Time: 0.061 ms
+Execution Time: 0.020 ms
+
+=== journey-detail @ 100 conversations (slowest command 1.2 ms) ===
+SELECT u."Id", u."AccessFailedCount", u."ConcurrencyStamp", u."CreatedAt", u."Email", u."EmailConfirmed", u."LockoutEnabled", u."LockoutEnd", u."Name", u."NormalizedEmail", u."NormalizedUserName", u."PasswordHash", u."PhoneNumber", u."PhoneNumberConfirmed", u."SecurityStamp", u."TwoFactorEnabled", u."UserName"
+FROM "Users" AS u
+WHERE u."Id" = @p
+LIMIT 1
+
+Limit  (cost=0.00..1.04 rows=1 width=307) (actual time=0.010..0.011 rows=1 loops=1)
+  Buffers: shared hit=1
+  ->  Seq Scan on "Users" u  (cost=0.00..1.04 rows=1 width=307) (actual time=0.009..0.010 rows=1 loops=1)
+        Filter: ("Id" = 'alex'::text)
+        Buffers: shared hit=1
+Planning Time: 0.065 ms
+Execution Time: 0.021 ms
+
+=== comparisons @ 100 conversations (slowest command 1.4 ms) ===
+SELECT u."Id", u."AccessFailedCount", u."ConcurrencyStamp", u."CreatedAt", u."Email", u."EmailConfirmed", u."LockoutEnabled", u."LockoutEnd", u."Name", u."NormalizedEmail", u."NormalizedUserName", u."PasswordHash", u."PhoneNumber", u."PhoneNumberConfirmed", u."SecurityStamp", u."TwoFactorEnabled", u."UserName"
+FROM "Users" AS u
+WHERE u."Id" = @p
+LIMIT 1
+
+Limit  (cost=0.00..1.04 rows=1 width=307) (actual time=0.011..0.011 rows=1 loops=1)
+  Buffers: shared hit=1
+  ->  Seq Scan on "Users" u  (cost=0.00..1.04 rows=1 width=307) (actual time=0.010..0.010 rows=1 loops=1)
+        Filter: ("Id" = 'alex'::text)
+        Buffers: shared hit=1
+Planning Time: 0.081 ms
+Execution Time: 0.022 ms
+
+=== public-snapshot @ 100 conversations (slowest command 6.5 ms) ===
+SELECT p."Snapshot"
+FROM "Publications" AS p
+WHERE p."Id" = @id
+LIMIT 2
+
+Limit  (cost=0.00..1.02 rows=1 width=18) (actual time=0.011..0.011 rows=1 loops=1)
+  Buffers: shared hit=1
+  ->  Seq Scan on "Publications" p  (cost=0.00..1.02 rows=1 width=18) (actual time=0.010..0.010 rows=1 loops=1)
+        Filter: ("Id" = 'scale-publication'::text)
+        Rows Removed by Filter: 1
+        Buffers: shared hit=1
+Planning Time: 0.075 ms
+Execution Time: 0.019 ms
+
+=== library @ 1000 conversations (slowest command 2.0 ms) ===
+SELECT c."Id", c."Title", c."Provider", c."Model", c."SourceFormat", c."SourceId", c."ApplicationProjectId", c."ExternalProjectId", c."SourceProjectName", c."SourcePath", c."Demo", c."CreatedAt", (
+    SELECT count(*)::int
+    FROM "Messages" AS m
+    WHERE c."Id" = m."ConversationId")
+FROM "Conversations" AS c
+WHERE c."WorkspaceId" = @wid
+ORDER BY c."CreatedAt" DESC, c."Id" DESC
+LIMIT @p
+
+Limit  (cost=0.28..3565.68 rows=51 width=200) (actual time=0.038..0.505 rows=51 loops=1)
+  Buffers: shared hit=169
+  ->  Index Scan Backward using "IX_Conversations_WorkspaceId_CreatedAt_Id" on "Conversations" c  (cost=0.28..70679.17 rows=1011 width=200) (actual time=0.037..0.499 rows=51 loops=1)
+        Index Cond: ("WorkspaceId" = 'cloudplay'::text)
+        Buffers: shared hit=169
+        SubPlan 1
+          ->  Aggregate  (cost=69.77..69.78 rows=1 width=4) (actual time=0.009..0.009 rows=1 loops=51)
+                Buffers: shared hit=162
+                ->  Bitmap Heap Scan on "Messages" m  (cost=4.45..69.72 rows=21 width=0) (actual time=0.006..0.007 rows=20 loops=51)
+                      Recheck Cond: (c."Id" = "ConversationId")
+                      Heap Blocks: exact=60
+                      Buffers: shared hit=162
+                      ->  Bitmap Index Scan on "IX_Messages_ConversationId_Order"  (cost=0.00..4.44 rows=21 width=0) (actual time=0.004..0.004 rows=20 loops=51)
+                            Index Cond: ("ConversationId" = c."Id")
+                            Buffers: shared hit=102
+Planning Time: 0.119 ms
+Execution Time: 0.527 ms
+
+=== search-hit @ 1000 conversations (slowest command 15.5 ms) ===
+SELECT c."Id", c."Title", c."Provider", c."Model", c."SourceFormat", c."SourceId", c."ApplicationProjectId", c."ExternalProjectId", c."SourceProjectName", c."SourcePath", c."Demo", c."CreatedAt", (
+    SELECT count(*)::int
+    FROM "Messages" AS m1
+    WHERE c."Id" = m1."ConversationId")
+FROM "Conversations" AS c
+WHERE c."WorkspaceId" = @wid AND (c."Title" LIKE @_8__locals1_q_contains OR c."Provider" LIKE @_8__locals1_q_contains OR (c."Model" IS NOT NULL AND c."Model" LIKE @_8__locals1_q_contains) OR c."Id" IN (
+    SELECT m0."ConversationId"
+    FROM "MessageContentBlock" AS m
+    INNER JOIN "Messages" AS m0 ON m."ConversationMessageId" = m0."Id"
+    WHERE m."Text" LIKE @_8__locals1_q_contains
+) OR c."Id" IN (
+    SELECT a0."ConversationId"
+    FROM "Comments" AS c0
+    INNER JOIN (
+        SELECT a."Id", a."ConversationId"
+        FROM "Annotations" AS a
+        WHERE a."WorkspaceId" = @_8__locals1_wid AND a."ConversationId" IS NOT NULL
+    ) AS a0 ON c0."AnnotationId" = a0."Id"
+    WHERE c0."Body" LIKE @_8__locals1_q_contains
+))
+ORDER BY c."CreatedAt" DESC, c."Id" DESC
+LIMIT @p
+
+Limit  (cost=4084.77..7653.19 rows=51 width=200) (actual time=13.396..13.767 rows=51 loops=1)
+  Buffers: shared hit=3405
+  ->  Index Scan Backward using "IX_Conversations_WorkspaceId_CreatedAt_Id" on "Conversations" c  (cost=4084.77..57121.33 rows=758 width=200) (actual time=13.395..13.762 rows=51 loops=1)
+        Index Cond: ("WorkspaceId" = 'cloudplay'::text)
+        Filter: (("Title" ~~ '%benchmark%'::text) OR ("Provider" ~~ '%benchmark%'::text) OR (("Model" IS NOT NULL) AND ("Model" ~~ '%benchmark%'::text)) OR (ANY ("Id" = (hashed SubPlan 2).col1)) OR (ANY ("Id" = (hashed SubPlan 3).col1)))
+        Buffers: shared hit=3405
+        SubPlan 1
+          ->  Aggregate  (cost=69.77..69.78 rows=1 width=4) (actual time=0.007..0.007 rows=1 loops=51)
+                Buffers: shared hit=162
+                ->  Bitmap Heap Scan on "Messages" m1  (cost=4.45..69.72 rows=21 width=0) (actual time=0.005..0.006 rows=20 loops=51)
+                      Recheck Cond: (c."Id" = "ConversationId")
+                      Heap Blocks: exact=60
+                      Buffers: shared hit=162
+                      ->  Bitmap Index Scan on "IX_Messages_ConversationId_Order"  (cost=0.00..4.44 rows=21 width=0) (actual time=0.003..0.003 rows=20 loops=51)
+                            Index Cond: ("ConversationId" = c."Id")
+                            Buffers: shared hit=102
+        SubPlan 2
+          ->  Hash Join  (cost=705.75..4029.65 rows=21004 width=10) (actual time=4.274..11.169 rows=21010 loops=1)
+                Hash Cond: (m."ConversationMessageId" = m0."Id")
+                Buffers: shared hit=3236
+                ->  Seq Scan on "MessageContentBlock" m  (cost=0.00..3268.75 rows=21004 width=14) (actual time=0.010..3.959 rows=21010 loops=1)
+                      Filter: ("Text" ~~ '%benchmark%'::text)
+                      Rows Removed by Filter: 90
+                      Buffers: shared hit=3005
+                ->  Hash  (cost=442.00..442.00 rows=21100 width=24) (actual time=4.252..4.252 rows=21100 loops=1)
+                      Buckets: 32768  Batches: 1  Memory Usage: 1438kB
+                      Buffers: shared hit=231
+                      ->  Seq Scan on "Messages" m0  (cost=0.00..442.00 rows=21100 width=24) (actual time=0.004..1.408 rows=21100 loops=1)
+                            Buffers: shared hit=231
+        SubPlan 3
+          ->  Nested Loop  (cost=0.00..2.34 rows=1 width=8) (never executed)
+                Join Filter: (c0."AnnotationId" = a."Id")
+                ->  Seq Scan on "Comments" c0  (cost=0.00..1.14 rows=1 width=8) (never executed)
+                      Filter: ("Body" ~~ '%benchmark%'::text)
+                ->  Seq Scan on "Annotations" a  (cost=0.00..1.10 rows=8 width=16) (never executed)
+                      Filter: (("ConversationId" IS NOT NULL) AND ("WorkspaceId" = 'cloudplay'::text))
+Planning:
+  Buffers: shared hit=22
+Planning Time: 0.398 ms
+Execution Time: 13.805 ms
+
+=== search-miss @ 1000 conversations (slowest command 4.1 ms) ===
+SELECT c."Id", c."Title", c."Provider", c."Model", c."SourceFormat", c."SourceId", c."ApplicationProjectId", c."ExternalProjectId", c."SourceProjectName", c."SourcePath", c."Demo", c."CreatedAt", (
+    SELECT count(*)::int
+    FROM "Messages" AS m1
+    WHERE c."Id" = m1."ConversationId")
+FROM "Conversations" AS c
+WHERE c."WorkspaceId" = @wid AND (c."Title" LIKE @_8__locals1_q_contains OR c."Provider" LIKE @_8__locals1_q_contains OR (c."Model" IS NOT NULL AND c."Model" LIKE @_8__locals1_q_contains) OR c."Id" IN (
+    SELECT m0."ConversationId"
+    FROM "MessageContentBlock" AS m
+    INNER JOIN "Messages" AS m0 ON m."ConversationMessageId" = m0."Id"
+    WHERE m."Text" LIKE @_8__locals1_q_contains
+) OR c."Id" IN (
+    SELECT a0."ConversationId"
+    FROM "Comments" AS c0
+    INNER JOIN (
+        SELECT a."Id", a."ConversationId"
+        FROM "Annotations" AS a
+        WHERE a."WorkspaceId" = @_8__locals1_wid AND a."ConversationId" IS NOT NULL
+    ) AS a0 ON c0."AnnotationId" = a0."Id"
+    WHERE c0."Body" LIKE @_8__locals1_q_contains
+))
+ORDER BY c."CreatedAt" DESC, c."Id" DESC
+LIMIT @p
+
+Limit  (cost=846.05..4414.47 rows=51 width=200) (actual time=1.988..1.990 rows=0 loops=1)
+  Buffers: shared hit=249
+  ->  Index Scan Backward using "IX_Conversations_WorkspaceId_CreatedAt_Id" on "Conversations" c  (cost=846.05..53882.61 rows=758 width=200) (actual time=1.987..1.989 rows=0 loops=1)
+        Index Cond: ("WorkspaceId" = 'cloudplay'::text)
+        Filter: (("Title" ~~ '%notpresent9981%'::text) OR ("Provider" ~~ '%notpresent9981%'::text) OR (("Model" IS NOT NULL) AND ("Model" ~~ '%notpresent9981%'::text)) OR (ANY ("Id" = (hashed SubPlan 2).col1)) OR (ANY ("Id" = (hashed SubPlan 3).col1)))
+        Rows Removed by Filter: 1011
+        Buffers: shared hit=249
+        SubPlan 1
+          ->  Aggregate  (cost=69.77..69.78 rows=1 width=4) (never executed)
+                ->  Bitmap Heap Scan on "Messages" m1  (cost=4.45..69.72 rows=21 width=0) (never executed)
+                      Recheck Cond: (c."Id" = "ConversationId")
+                      ->  Bitmap Index Scan on "IX_Messages_ConversationId_Order"  (cost=0.00..4.44 rows=21 width=0) (never executed)
+                            Index Cond: ("ConversationId" = c."Id")
+        SubPlan 2
+          ->  Nested Loop  (cost=831.40..843.43 rows=1 width=10) (actual time=1.743..1.743 rows=0 loops=1)
+                Buffers: shared hit=195
+                ->  Bitmap Heap Scan on "MessageContentBlock" m  (cost=831.12..835.13 rows=1 width=14) (actual time=1.742..1.742 rows=0 loops=1)
+                      Recheck Cond: ("Text" ~~ '%notpresent9981%'::text)
+                      Buffers: shared hit=195
+                      ->  Bitmap Index Scan on "IX_MessageContentBlock_Text_trgm"  (cost=0.00..831.12 rows=1 width=0) (actual time=1.736..1.736 rows=0 loops=1)
+                            Index Cond: ("Text" ~~ '%notpresent9981%'::text)
+                            Buffers: shared hit=195
+                ->  Index Scan using "PK_Messages" on "Messages" m0  (cost=0.29..8.30 rows=1 width=24) (never executed)
+                      Index Cond: ("Id" = m."ConversationMessageId")
+        SubPlan 3
+          ->  Nested Loop  (cost=0.00..2.34 rows=1 width=8) (actual time=0.009..0.010 rows=0 loops=1)
+                Join Filter: (c0."AnnotationId" = a."Id")
+                Buffers: shared hit=1
+                ->  Seq Scan on "Comments" c0  (cost=0.00..1.14 rows=1 width=8) (actual time=0.009..0.009 rows=0 loops=1)
+                      Filter: ("Body" ~~ '%notpresent9981%'::text)
+                      Rows Removed by Filter: 11
+                      Buffers: shared hit=1
+                ->  Seq Scan on "Annotations" a  (cost=0.00..1.10 rows=8 width=16) (never executed)
+                      Filter: (("ConversationId" IS NOT NULL) AND ("WorkspaceId" = 'cloudplay'::text))
+Planning:
+  Buffers: shared hit=22
+Planning Time: 0.439 ms
+Execution Time: 2.026 ms
+
+=== long-conversation @ 1000 conversations (slowest command 1.5 ms) ===
+SELECT m2."Id", m2."CreatedAt", m2."ConversationMessageId", m2."Order", m2."Kind", m2."Text", m2."Metadata", m3."Id"
+FROM (
+    SELECT m."Id", m."Order"
+    FROM "Messages" AS m
+    WHERE m."ConversationId" = @id
+    ORDER BY m."Order", m."Id"
+    LIMIT @p
+) AS m3
+INNER JOIN "MessageContentBlock" AS m2 ON m3."Id" = m2."ConversationMessageId"
+ORDER BY m3."Order", m3."Id", m2."Order"
+
+Incremental Sort  (cost=9.13..1483.36 rows=201 width=1084) (actual time=0.217..0.965 rows=201 loops=1)
+  Sort Key: m."Order", m2."ConversationMessageId", m2."Order"
+  Presorted Key: m."Order", m2."ConversationMessageId"
+  Full-sort Groups: 7  Sort Method: quicksort  Average Memory: 59kB  Peak Memory: 59kB
+  Buffers: shared hit=627
+  ->  Nested Loop  (cost=1.79..1474.32 rows=201 width=1084) (actual time=0.040..0.867 rows=201 loops=1)
+        Buffers: shared hit=627
+        ->  Limit  (cost=1.50..163.00 rows=201 width=18) (actual time=0.032..0.096 rows=201 loops=1)
+              Buffers: shared hit=24
+              ->  Incremental Sort  (cost=1.50..804.99 rows=1000 width=18) (actual time=0.031..0.086 rows=201 loops=1)
+                    Sort Key: m."Order", m."Id"
+                    Presorted Key: m."Order"
+                    Full-sort Groups: 7  Sort Method: quicksort  Average Memory: 27kB  Peak Memory: 27kB
+                    Buffers: shared hit=24
+                    ->  Index Scan using "IX_Messages_ConversationId_Order" on "Messages" m  (cost=0.29..772.55 rows=1000 width=18) (actual time=0.013..0.055 rows=202 loops=1)
+                          Index Cond: ("ConversationId" = 'scale-long'::text)
+                          Buffers: shared hit=24
+        ->  Index Scan using "IX_MessageContentBlock_ConversationMessageId" on "MessageContentBlock" m2  (cost=0.29..6.51 rows=1 width=1066) (actual time=0.003..0.003 rows=1 loops=201)
+              Index Cond: ("ConversationMessageId" = m."Id")
+              Buffers: shared hit=603
+Planning:
+  Buffers: shared hit=6
+Planning Time: 0.159 ms
+Execution Time: 0.995 ms
+
+=== journey-list @ 1000 conversations (slowest command 1.3 ms) ===
+SELECT u."Id", u."AccessFailedCount", u."ConcurrencyStamp", u."CreatedAt", u."Email", u."EmailConfirmed", u."LockoutEnabled", u."LockoutEnd", u."Name", u."NormalizedEmail", u."NormalizedUserName", u."PasswordHash", u."PhoneNumber", u."PhoneNumberConfirmed", u."SecurityStamp", u."TwoFactorEnabled", u."UserName"
+FROM "Users" AS u
+WHERE u."Id" = @p
+LIMIT 1
+
+Limit  (cost=0.00..1.04 rows=1 width=307) (actual time=0.009..0.009 rows=1 loops=1)
+  Buffers: shared hit=1
+  ->  Seq Scan on "Users" u  (cost=0.00..1.04 rows=1 width=307) (actual time=0.008..0.008 rows=1 loops=1)
+        Filter: ("Id" = 'alex'::text)
+        Buffers: shared hit=1
+Planning Time: 0.060 ms
+Execution Time: 0.019 ms
+
+=== journey-detail @ 1000 conversations (slowest command 2.1 ms) ===
+SELECT m."Role"
+FROM "Memberships" AS m
+WHERE m."WorkspaceId" = @wid AND m."UserId" = @uid
+LIMIT 2
+
+Limit  (cost=0.00..1.06 rows=2 width=6) (actual time=0.018..0.020 rows=1 loops=1)
+  Buffers: shared hit=1
+  ->  Seq Scan on "Memberships" m  (cost=0.00..1.06 rows=2 width=6) (actual time=0.016..0.017 rows=1 loops=1)
+        Filter: (("WorkspaceId" = 'cloudplay'::text) AND ("UserId" = 'alex'::text))
+        Rows Removed by Filter: 3
+        Buffers: shared hit=1
+Planning Time: 0.107 ms
+Execution Time: 0.035 ms
+
+=== comparisons @ 1000 conversations (slowest command 1.8 ms) ===
+SELECT u."Id", u."AccessFailedCount", u."ConcurrencyStamp", u."CreatedAt", u."Email", u."EmailConfirmed", u."LockoutEnabled", u."LockoutEnd", u."Name", u."NormalizedEmail", u."NormalizedUserName", u."PasswordHash", u."PhoneNumber", u."PhoneNumberConfirmed", u."SecurityStamp", u."TwoFactorEnabled", u."UserName"
+FROM "Users" AS u
+WHERE u."Id" = @p
+LIMIT 1
+
+Limit  (cost=0.00..1.04 rows=1 width=307) (actual time=0.006..0.007 rows=1 loops=1)
+  Buffers: shared hit=1
+  ->  Seq Scan on "Users" u  (cost=0.00..1.04 rows=1 width=307) (actual time=0.006..0.006 rows=1 loops=1)
+        Filter: ("Id" = 'alex'::text)
+        Buffers: shared hit=1
+Planning Time: 0.048 ms
+Execution Time: 0.015 ms
+
+=== public-snapshot @ 1000 conversations (slowest command 6.7 ms) ===
+SELECT p."Snapshot"
+FROM "Publications" AS p
+WHERE p."Id" = @id
+LIMIT 2
+
+Limit  (cost=0.00..1.02 rows=1 width=18) (actual time=0.011..0.012 rows=1 loops=1)
+  Buffers: shared hit=1
+  ->  Seq Scan on "Publications" p  (cost=0.00..1.02 rows=1 width=18) (actual time=0.010..0.010 rows=1 loops=1)
+        Filter: ("Id" = 'scale-publication'::text)
+        Rows Removed by Filter: 1
+        Buffers: shared hit=1
+Planning Time: 0.061 ms
+Execution Time: 0.021 ms
+

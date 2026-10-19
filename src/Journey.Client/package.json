@@ -1,0 +1,38 @@
+{
+  "name": "ai-journey",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "test": "playwright test",
+    "format": "prettier --write src",
+    "test:i18n": "node --test i18n.test.cjs sanitization-i18n.test.cjs"
+  },
+  "dependencies": {
+    "@microsoft/signalr": "^10.0.0",
+    "@tailwindcss/vite": "^4.1.0",
+    "@tiptap/react": "^3.0.0",
+    "@tiptap/starter-kit": "^3.0.0",
+    "@xyflow/react": "^12.8.0",
+    "lucide-react": "^0.468.0",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
+    "tailwindcss": "^4.1.0",
+    "zustand": "^5.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "prettier": "^3.9.9",
+    "typescript": "~5.9.0",
+    "vite": "^7.1.0"
+  }
+}

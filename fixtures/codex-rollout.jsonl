@@ -1,0 +1,5 @@
+{"timestamp":"2026-01-01T10:00:00+02:00","type":"session_meta","payload":{"id":"codex-a","cwd":"C:/demo/cloudplay","forked_from_id":"codex-parent","cli_version":"fixture"}}
+{"timestamp":"2026-01-01T10:00:01+02:00","type":"response_item","payload":{"type":"message","id":"u1","role":"user","content":[{"type":"input_text","text":"Test streaming"}]}}
+{"timestamp":"2026-01-01T10:00:02+02:00","type":"response_item","payload":{"type":"function_call","call_id":"call-1","name":"shell","arguments":"echo example"}}
+{"timestamp":"2026-01-01T10:00:03+02:00","type":"response_item","payload":{"type":"function_call_output","call_id":"call-1","output":"example"}}
+{"timestamp":"2026-01-01T10:00:04+02:00","type":"compacted","payload":{"message":"Recorded summary"}}

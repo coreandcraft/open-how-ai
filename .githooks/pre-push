@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+for runtime in python3 python; do
+    if "$runtime" -c 'import sys; sys.exit(sys.version_info < (3, 9))' >/dev/null 2>&1; then
+        exec "$runtime" tools/check-repository-privacy.py --pre-push
+    fi
+done
+echo 'Privacy check requires Python 3.9 or newer; refusing push.' >&2
+exit 1

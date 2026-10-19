@@ -1,0 +1,1 @@
+{"id":"api-a","type":"message","role":"assistant","content":[{"type":"text","text":"Answer"},{"type":"tool_use","id":"call-1","name":"read","input":{}}]}

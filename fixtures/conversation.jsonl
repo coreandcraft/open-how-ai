@@ -1,0 +1,2 @@
+{"id":"u","role":"user","content":"A JSONL prompt"}
+{"id":"a","role":"assistant","content":"A JSONL answer"}

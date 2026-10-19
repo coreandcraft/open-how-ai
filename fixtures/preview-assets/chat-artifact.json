@@ -1,0 +1,64 @@
+{
+  "id": "chat-artifact-sample",
+  "title": "Images that exist only in the chat",
+  "messages": [
+    {
+      "id": "ask",
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "Show the mockups that were generated in the chat, without adding them to the project."
+        }
+      ]
+    },
+    {
+      "id": "pointer",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Library mockup kept as a chat file pointer. No project file is included."
+        },
+        {
+          "type": "image_asset_pointer",
+          "asset_pointer": "file-service://chat-images/library-desktop.jpg",
+          "width": 1024,
+          "height": 576
+        }
+      ]
+    },
+    {
+      "id": "remote",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Timeline mockup referenced by a remote address."
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://example.invalid/mobile-timeline.jpg"
+          }
+        }
+      ]
+    },
+    {
+      "id": "inline",
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Trip card embedded in the message itself."
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aWQAAAABJRU5ErkJggg=="
+          }
+        }
+      ]
+    }
+  ]
+}

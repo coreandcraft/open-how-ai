@@ -1,0 +1,24 @@
+name: Repository privacy
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  privacy:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test privacy protections
+        run: python -m unittest discover -s tools/tests -p 'test_repository_privacy.py'
+      - name: Scan complete history for private files and credentials
+        run: python tools/check-repository-privacy.py --history HEAD

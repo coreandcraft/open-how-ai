@@ -1,0 +1,1 @@
+[{"provider":"Codex","externalId":"codex-a","parentSession":"codex-parent","roles":["user","event","event","event"],"parents":[null,null,null,null],"kinds":["text","function_call","function_call_output","compacted"]}]

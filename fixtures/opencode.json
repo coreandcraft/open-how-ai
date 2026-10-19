@@ -1,0 +1,1 @@
+{"info":{"id":"opencode-a","projectID":"project-a","parentID":"opencode-parent","title":"Streaming","directory":"C:/demo"},"messages":[{"info":{"id":"u1","role":"user"},"parts":[{"type":"text","text":"Plan"}]},{"info":{"id":"a1","role":"assistant","parentID":"u1"},"parts":[{"type":"tool","callID":"call-1","tool":"read","state":{"status":"completed","output":"sample"}}]}]}

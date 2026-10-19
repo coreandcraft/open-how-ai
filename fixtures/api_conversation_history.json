@@ -1,0 +1,1 @@
+[{"role":"user","content":[{"type":"text","text":"Inspect task"}]},{"role":"assistant","content":[{"type":"tool_use","id":"tool-1","name":"read_file","input":{"path":"demo.txt"}}]}]

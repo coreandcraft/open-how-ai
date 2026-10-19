@@ -1,0 +1,1 @@
+{"title":"Generic conversation","provider":"My Tool","messages":[{"id":"u","role":"user","content":"What did we learn?"},{"id":"a","parentId":"u","role":"assistant","content":[{"type":"text","text":"Measure before optimizing."}]}]}

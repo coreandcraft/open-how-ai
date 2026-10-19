@@ -1,0 +1,46 @@
+.annotation-content p {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.annotation-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 8px 0;
+}
+.annotation-topic {
+  border: 1px solid currentColor;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+.topic-default {
+  color: #5478ca;
+}
+.topic-important {
+  color: #ab6300;
+  background: #ffbd3020;
+  font-weight: 700;
+}
+.topic-action {
+  color: #a65bbd;
+  background: #a65bbd15;
+}
+.annotation-tools {
+  margin: 8px 0;
+}
+.annotation-video {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+.annotation-video iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 8px;
+}
+.annotation-video a {
+  font-size: 12px;
+}

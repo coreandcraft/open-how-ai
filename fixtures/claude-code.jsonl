@@ -1,0 +1,4 @@
+{"sessionId":"session-a","uuid":"u1","parentUuid":null,"type":"user","cwd":"C:/demo/cloudplay","message":{"role":"user","content":"Inspect streaming"}}
+{"sessionId":"session-a","uuid":"a1","parentUuid":"u1","type":"assistant","message":{"role":"assistant","model":"fixture-model","content":[{"type":"tool_use","id":"call-1","name":"read","input":{"path":"demo.txt"}}]}}
+{"sessionId":"session-a","uuid":"u2","parentUuid":"a1","type":"user","message":{"role":"user","content":[{"type":"tool_result","tool_use_id":"call-1","content":"file result"}]}}
+{"sessionId":"session-a","agentId":"agent-b","uuid":"b1","parentUuid":null,"type":"assistant","message":{"role":"assistant","content":"Child agent result"}}

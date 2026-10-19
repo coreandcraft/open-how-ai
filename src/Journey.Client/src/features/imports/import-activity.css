@@ -1,0 +1,81 @@
+.retained-originals {
+  padding: 12px 16px;
+}
+.retained-originals > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 1rem;
+  cursor: pointer;
+  font-weight: 650;
+}
+.retained-originals > summary .muted {
+  font-weight: 400;
+}
+.retained-originals > p {
+  margin: 0.75rem 0 0;
+}
+.retained-originals > ul {
+  max-height: 8rem;
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+  overflow: auto;
+}
+.import-activity {
+  display: grid;
+  justify-items: center;
+  gap: 0.5rem;
+  width: min(100%, 28rem);
+}
+.import-activity p,
+.import-activity h3 {
+  margin: 0;
+}
+.import-sizes {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  width: min(100%, 28rem);
+  margin: 1rem auto;
+  color: var(--text);
+  text-align: center;
+}
+.import-activity .import-sizes {
+  margin: 0;
+}
+.import-sizes p {
+  margin: 0;
+}
+.import-activity > div {
+  width: 100%;
+}
+.import-activity progress,
+.import-sizes progress,
+.import-result > progress {
+  width: 100%;
+  max-width: 28rem;
+}
+.import-result .import-activity {
+  color: var(--text);
+  margin-inline: auto;
+}
+.import-result > progress {
+  display: block;
+  margin-inline: auto;
+}
+.import-activity-spinner {
+  animation: import-activity-spin 1s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+@keyframes import-activity-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .import-activity-spinner {
+    animation-duration: 3s;
+  }
+}

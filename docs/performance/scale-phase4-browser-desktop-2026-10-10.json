@@ -1,0 +1,59 @@
+{
+  "generatedAtUtc": "2026-10-10T06:06:00Z",
+  "viewport": "1920x1080",
+  "method": "Cursor IDE browser CDP after Alex login on http://127.0.0.1:5080. Hash navigation on a warm SPA (not a cold document load). Long-task observer with buffered entries. Heap is performance.memory usedJSHeapSize in this Electron webview and is understated versus a standalone Chromium process. Playwright chromium was not installed in the sandbox, so e2e/scale-browser.spec.ts was not the measurement runner.",
+  "excludes": [
+    "cold cache",
+    "WAN/TLS",
+    "Azure App Service",
+    "Playwright chromium"
+  ],
+  "probes": [
+    {
+      "route": "dashboard",
+      "usableMs": 22,
+      "elapsedMs": 22,
+      "longTasks": 2,
+      "longTaskMs": 139,
+      "heapMiB": 6,
+      "heading": "Good to see you"
+    },
+    {
+      "route": "library",
+      "usableMs": 33,
+      "elapsedMs": 33,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "heapMiB": 6,
+      "heading": "Conversation library"
+    },
+    {
+      "route": "explorer/demo-c0",
+      "usableMs": 299,
+      "elapsedMs": 299,
+      "longTasks": 1,
+      "longTaskMs": 57,
+      "heapMiB": 11.7,
+      "heading": "The browser is the console"
+    },
+    {
+      "route": "canvas/cloud-gaming",
+      "usableMs": 352,
+      "elapsedMs": 353,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "heapMiB": 15.7,
+      "heading": "canvas",
+      "reactFlowNodes": 12
+    },
+    {
+      "route": "compare",
+      "usableMs": 328,
+      "elapsedMs": 328,
+      "longTasks": 0,
+      "longTaskMs": 0,
+      "heapMiB": 13.8,
+      "heading": "Compare approaches"
+    }
+  ]
+}
